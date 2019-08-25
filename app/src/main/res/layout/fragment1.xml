@@ -2,13 +2,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/Frag1FragmentLayout"
     tools:context="com.kriiskrishna.instantx.Fragment1">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        app:title="Notes"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/MyNotesRecycle"
+            android:layout_marginRight="2dp">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:text="one" />
+        android:layout_gravity="end">
+        <ImageView
+            android:id="@+id/Fragment1NewNoteButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/add_black"
+            android:padding="10dp"
+            android:background="@drawable/buttonroundlight"
+            android:layout_marginBottom="30dp"
+            />
+    </RelativeLayout>
+
 
 </FrameLayout>
