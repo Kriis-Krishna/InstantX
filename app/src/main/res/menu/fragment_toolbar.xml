@@ -2,13 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".EditNote">
+    tools:context=".EditNote"
+    >
 
     <item
         android:id="@+id/FragmentToolbarItem2"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/viewstream_black"
+        android:icon="@drawable/dashboard_black"
         app:showAsAction="ifRoom"></item>
     <item
         android:id="@+id/FragmentToolbarItem1"

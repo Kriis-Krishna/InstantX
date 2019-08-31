@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,27 +37,22 @@ import java.net.URL;
 
 public class Fragment1 extends Fragment {
 
-    private String colorValue;
-    private String post_key;
-    private static String viewMode = "0";
+    private String colorValue,post_key;
+    private static String viewMode = "0", deleteMode = "0";
     private Toolbar mTopToolbar;
     private ImageView NewNoteButton;
     private RecyclerView myNotesRecycler;
     private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference myRef;
-    private static int phoneHeight;
-    private static int phoneWidth;
-    static int finalHeight;
-    static int finalWidth;
-    static int phoneWidthMode;
-    private static URL myUrl;
+    private static int phoneHeight,phoneWidth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View V = inflater.inflate(R.layout.fragment1, null);
         mTopToolbar = V.findViewById(R.id.my_toolbar);
+        mTopToolbar.setNavigationIcon(null);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mTopToolbar);
         setHasOptionsMenu(true);
         getScreenMetrics();
@@ -71,6 +67,12 @@ public class Fragment1 extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), EditNote.class));
+            }
+        });
+        mTopToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDeleteMode();
             }
         });
 
@@ -98,6 +100,28 @@ public class Fragment1 extends Fragment {
         myNotesRecycler.setLayoutManager(LayoutManager);
     }
 
+    private void setDeleteMode() {
+        if(deleteMode.equals("0")){
+            deleteModeSetOn();
+            deleteMode = "1";
+        }else{
+            deleteModeSetOff();
+            deleteMode = "0";
+        }
+    }
+
+    private void deleteModeSetOff() {
+        mTopToolbar.setNavigationIcon(null);
+        mTopToolbar.getMenu().getItem(0).setIcon(R.drawable.viewstream_black);
+        mTopToolbar.getMenu().getItem(1).setIcon(R.drawable.search_black);
+    }
+
+    private void deleteModeSetOn() {
+        mTopToolbar.setNavigationIcon(R.drawable.back_black);
+        mTopToolbar.getMenu().getItem(0).setIcon(R.drawable.alarms_black);
+        mTopToolbar.getMenu().getItem(1).setIcon(R.drawable.delete_black);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_toolbar, menu);
@@ -108,18 +132,28 @@ public class Fragment1 extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.FragmentToolbarItem1) {
-            Toast.makeText(getContext(), "Search clicked", Toast.LENGTH_LONG).show();
-            return true;
+                    if(deleteMode.equals("1")){
+                        myRef.child(post_key).removeValue();
+                        setDeleteMode();
+                    }else{
+                        //////////////////////////
+                    }
+                    return true;
         } else if (id == R.id.FragmentToolbarItem2) {
-            Toast.makeText(getContext(), "Alignment clicked", Toast.LENGTH_LONG).show();
-            if(viewMode.equals("0")){
-                setGridLayoutManagerAsView();
-                viewMode = "1";
-            }else{
-                setLinearLayoutManagerAsView();
-                viewMode = "0";
-            }
-            return true;
+                    if(deleteMode.equals("1")){
+                        setDeleteMode();
+                    }else{
+                        if(viewMode.equals("0")){
+                            mTopToolbar.getMenu().getItem(0).setIcon(R.drawable.viewstream_black);
+                            setGridLayoutManagerAsView();
+                            viewMode = "1";
+                        }else{
+                            mTopToolbar.getMenu().getItem(0).setIcon(R.drawable.dashboard_black);
+                            setLinearLayoutManagerAsView();
+                            viewMode = "0";
+                        }
+                    }
+                    return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -138,7 +172,6 @@ public class Fragment1 extends Fragment {
                 viewHolder.setTime(model.getTime());
                 viewHolder.setUri(model.getUri());
                 final String postkey = getRef(position).getKey();
-                post_key = postkey;
                 GradientDrawable shape =  new GradientDrawable();
                 shape.setCornerRadius( 15 );
                 shape.setColor(Color.parseColor(model.getColor()));
@@ -147,7 +180,17 @@ public class Fragment1 extends Fragment {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getContext(),"Height :"+ phoneHeight +" Width :"+ phoneWidth+"\nHeight :"+ finalHeight +" Width :"+ finalWidth,Toast.LENGTH_SHORT).show();
+                        deleteModeSetOff();
+                        deleteMode = "0";
+                        ///
+                     }
+                });
+                viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        post_key = postkey;
+                        setDeleteMode();
+                        return true;
                     }
                 });
             }
@@ -193,12 +236,10 @@ public class Fragment1 extends Fragment {
             if(image!=null) {
                 ImageView post_image = mView.findViewById(R.id.RecyclerItemView1);
                 Picasso.get().load(image).into(post_image);
-                try {
-                    URL url = new URL("http://....");
-                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch(IOException e) {
-                    System.out.println(e);
-                }
+                if(viewMode.equals("0"))
+                    post_image.getLayoutParams().height = 500;
+                else
+                    post_image.getLayoutParams().height = 250;
                 post_image.setVisibility(View.VISIBLE);
             }
         }
