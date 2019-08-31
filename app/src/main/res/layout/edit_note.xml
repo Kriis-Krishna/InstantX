@@ -90,14 +90,15 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
         android:layout_above="@id/EditNoteLayout4"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
         <TextView
             android:id="@+id/EditNoteOption1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="          Set Reminder"
             android:padding="10dp"
-            android:textSize="12dp"
+            android:textSize="15dp"
             android:drawableLeft="@drawable/alarms_black"
             android:textColor="@color/A"/>
         <TextView
@@ -106,7 +107,7 @@
             android:layout_height="wrap_content"
             android:text="          Add Image"
             android:padding="10dp"
-            android:textSize="12dp"
+            android:textSize="15dp"
             android:drawableLeft="@drawable/image_black"
             android:textColor="@color/A"/>
     </LinearLayout>
@@ -115,8 +116,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
         android:background="@color/C1"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp">
         <TextView
@@ -125,7 +126,7 @@
             android:layout_height="wrap_content"
             android:text="          Share"
             android:padding="10dp"
-            android:textSize="12dp"
+            android:textSize="15dp"
             android:drawableLeft="@drawable/share_black"
             android:textColor="@color/A"/>
         <TextView
@@ -134,9 +135,17 @@
             android:layout_height="wrap_content"
             android:text="          Copy"
             android:padding="10dp"
-            android:textSize="12dp"
+            android:textSize="15dp"
             android:drawableLeft="@drawable/copy_black"
             android:textColor="@color/A"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick a color"
+            android:textSize="12dp"
+            android:padding="5dp"
+            android:textColor="@color/A"
+            android:gravity="center"/>
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

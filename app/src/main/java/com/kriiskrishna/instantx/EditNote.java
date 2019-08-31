@@ -221,7 +221,9 @@ public class EditNote extends AppCompatActivity {
                 }
             });
         }else mprogress.dismiss();
+        if(!title.getText().toString().isEmpty())
         myRef.child(path).child("title").setValue(title.getText().toString());
+        if(!content.getText().toString().isEmpty())
         myRef.child(path).child("content").setValue(content.getText().toString());
         myRef.child(path).child("color").setValue(backgroundColor);
         myRef.child(path).child("time").setValue(timeWithoutSec);

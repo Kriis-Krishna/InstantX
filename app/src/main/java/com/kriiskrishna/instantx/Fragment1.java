@@ -1,7 +1,11 @@
 package com.kriiskrishna.instantx;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,25 +22,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Fragment1 extends Fragment {
 
-    private String colorValue,post_key,viewMode = "0";
+    private String colorValue;
+    private String post_key;
+    private static String viewMode = "0";
     private Toolbar mTopToolbar;
     private ImageView NewNoteButton;
     private RecyclerView myNotesRecycler;
     private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference myRef;
+    private static int phoneHeight;
+    private static int phoneWidth;
+    static int finalHeight;
+    static int finalWidth;
+    static int phoneWidthMode;
+    private static URL myUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +59,7 @@ public class Fragment1 extends Fragment {
         mTopToolbar = V.findViewById(R.id.my_toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mTopToolbar);
         setHasOptionsMenu(true);
+        getScreenMetrics();
 
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -62,6 +78,14 @@ public class Fragment1 extends Fragment {
         setLinearLayoutManagerAsView();
 
         return V;
+    }
+
+    private void getScreenMetrics() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        phoneHeight = displayMetrics.heightPixels;
+        phoneWidth = displayMetrics.widthPixels;
+        Toast.makeText(getContext(),"Height :"+ phoneHeight +" Width :"+ phoneWidth,Toast.LENGTH_SHORT).show();
     }
 
     private void setLinearLayoutManagerAsView() {
@@ -119,6 +143,13 @@ public class Fragment1 extends Fragment {
                 shape.setCornerRadius( 15 );
                 shape.setColor(Color.parseColor(model.getColor()));
                 viewHolder.mView.setBackground(shape);
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getContext(),"Height :"+ phoneHeight +" Width :"+ phoneWidth+"\nHeight :"+ finalHeight +" Width :"+ finalWidth,Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             @Override
             public int getItemViewType(int position) {
@@ -140,14 +171,14 @@ public class Fragment1 extends Fragment {
         }
 
         public void setTitle(String title) {
-            TextView post_Title = mView.findViewById(R.id.RecyclerItemView2);
-            if(!title.equals(null)){
+            if(title != null){
+                TextView post_Title = mView.findViewById(R.id.RecyclerItemView2);
                 post_Title.setText(title);
                 post_Title.setVisibility(View.VISIBLE);}
         }
         public void setContent(String content) {
-            TextView post_Title = mView.findViewById(R.id.RecyclerItemView3);
-            if(!content.equals(null)){
+            if(content != null){
+                TextView post_Title = mView.findViewById(R.id.RecyclerItemView3);
                 post_Title.setText(content);
                 post_Title.setVisibility(View.VISIBLE);}
         }
@@ -158,10 +189,16 @@ public class Fragment1 extends Fragment {
         public void setColor(String color) {
             colorValue = color;
         }
-        public void setUri(String image){
+        public void setUri(String image) {
             if(image!=null) {
-                ImageView post_image = (ImageView) mView.findViewById(R.id.RecyclerItemView1);
+                ImageView post_image = mView.findViewById(R.id.RecyclerItemView1);
                 Picasso.get().load(image).into(post_image);
+                try {
+                    URL url = new URL("http://....");
+                    Bitmap imageBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch(IOException e) {
+                    System.out.println(e);
+                }
                 post_image.setVisibility(View.VISIBLE);
             }
         }
