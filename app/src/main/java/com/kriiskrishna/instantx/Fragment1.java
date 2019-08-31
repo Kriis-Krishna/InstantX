@@ -87,7 +87,7 @@ public class Fragment1 extends Fragment {
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         phoneHeight = displayMetrics.heightPixels;
         phoneWidth = displayMetrics.widthPixels;
-        Toast.makeText(getContext(),"Height :"+ phoneHeight +" Width :"+ phoneWidth,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(),"Height :"+ phoneHeight +" Width :"+ phoneWidth,Toast.LENGTH_SHORT).show();
     }
 
     private void setLinearLayoutManagerAsView() {
@@ -182,7 +182,9 @@ public class Fragment1 extends Fragment {
                     public void onClick(View view) {
                         deleteModeSetOff();
                         deleteMode = "0";
-                        ///
+                        Intent editNotes = new Intent(getActivity(),EditNote.class);
+                        editNotes.putExtra("NoteKey",postkey);
+                        startActivity(editNotes);
                      }
                 });
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
